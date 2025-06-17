@@ -1,0 +1,62 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaMirrorMaker2
+metadata:
+  name: my-mirror-maker-2
+  namespace: target
+spec:
+  version: 3.9.0
+  replicas: 1
+  connectCluster: "cluster-b" # Must be the target custer
+  clusters:
+    - alias: "cluster-a" # Source cluster
+      bootstrapServers: cluster-a-kafka-bootstrap-source.apps.<cluster-name>.<domain>:443
+      tls:
+        trustedCertificates:
+          - secretName: cluster-a-cluster-ca-cert
+            pattern: "*.crt"
+      authentication:
+        type: tls
+        certificateAndKey:
+          secretName: cluster-a-user
+          certificate: user.crt
+          key: user.key
+    - alias: "cluster-b" # Target cluster
+      bootstrapServers: cluster-b-kafka-bootstrap-target.apps.<cluster-name>.<domain>:443
+      tls:
+        trustedCertificates:
+          - secretName: cluster-b-cluster-ca-cert
+            pattern: "*.crt"
+      authentication:
+        type: tls
+        certificateAndKey:
+          secretName: cluster-b-user
+          certificate: user.crt
+          key: user.key
+      config:
+        # -1 means it will use the default replication factor configured in the broker
+        config.storage.replication.factor: -1
+        offset.storage.replication.factor: -1
+        status.storage.replication.factor: -1
+  mirrors:
+    - sourceCluster: "cluster-a"
+      targetCluster: "cluster-b"
+      sourceConnector:
+        tasksMax: 1
+        config:
+          # -1 means it will use the default replication factor configured in the broker
+          replication.factor: -1
+          offset-syncs.topic.replication.factor: -1
+          sync.topic.acls.enabled: "false"
+          refresh.topics.interval.seconds: 600
+          offset.lag.max: 100
+      checkpointConnector:
+        tasksMax: 1
+        config:
+          # -1 means it will use the default replication factor configured in the broker
+          checkpoints.topic.replication.factor: -1
+          sync.group.offsets.enabled: "true"
+          emit.checkpoints.interval.seconds: 60
+          sync.group.offsets.interval.seconds: 60
+          refresh.groups.interval.seconds: 600
+      topicsPattern: ".*"
+      groupsPattern: ".*"

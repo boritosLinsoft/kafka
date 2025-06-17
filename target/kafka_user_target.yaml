@@ -1,0 +1,88 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: cluster-b-user
+  namespace: target
+  labels:
+    strimzi.io/cluster: cluster-b
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      # Underlying Kafka Connects internal topics used to store configuration, offsets or status
+      - resource:
+          type: group
+          name: mirrormaker2-cluster
+        operations:
+          - Read
+      - resource:
+          type: topic
+          name: mirrormaker2-cluster-configs
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+          - Create
+      - resource:
+          type: topic
+          name: mirrormaker2-cluster-status
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+          - Create
+      - resource:
+          type: topic
+          name: mirrormaker2-cluster-offsets
+        operations:
+          - Read
+          - Describe
+          - DescribeConfigs
+          - Write
+          - Create
+      - resource: # Needed for every topic which is mirrored
+        # MirrorSourceConnector
+      - resource: # Needed for every topic which is mirrored
+          type: topic
+          name: "*"
+        # MirrorSourceConnector
+
+        operations:
+          - Read
+          - Write
+          - AlterConfigs
+          - Alter
+          - Create
+      - resource:
+          type: cluster
+        # MirrorCheckpointConnector
+
+        operations:
+          - Describe
+      - resource:
+          type: topic
+          name: cluster-a.checkpoints.internal
+        operations:
+          - Describe
+          - Write
+          - Create
+      - resource: # Needed for every group for which the offset is synced
+          type: group
+          name: "*"
+        operations:
+          - Read
+          - Describe
+    # MirrorHeartbeatConnector => needed only if the connector is enabled
+
+# - resource:
+#     type: topic
+#     name: heartbeats
+#   operations:
+#     - Read
+#     - Create
+#     - Describe
+#     - Write

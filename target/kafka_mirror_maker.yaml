@@ -4,34 +4,34 @@ metadata:
   name: my-mirror-maker-2
   namespace: target
 spec:
-  version: 3.9.0
+  version: 3.0.0
   replicas: 1
   connectCluster: "cluster-b" # Must be the target custer
   clusters:
     - alias: "cluster-a" # Source cluster
-      bootstrapServers: cluster-a-kafka-bootstrap-source.apps.<cluster-name>.<domain>:443
-      tls:
-        trustedCertificates:
-          - secretName: cluster-a-cluster-ca-cert
-            pattern: "*.crt"
-      authentication:
-        type: tls
-        certificateAndKey:
-          secretName: cluster-a-user
-          certificate: user.crt
-          key: user.key
+      bootstrapServers: cluster-a-kafka-bootstrap.source.svc.cluster.local:9092
+      #      tls:
+      #        trustedCertificates:
+      #          - secretName: cluster-a-cluster-ca-cert
+      #            pattern: "*.crt"
+      #      authentication:
+      #        type: tls
+      #        certificateAndKey:
+      #          secretName: cluster-a-user
+      #          certificate: user.crt
+      #          key: user.key
     - alias: "cluster-b" # Target cluster
-      bootstrapServers: cluster-b-kafka-bootstrap-target.apps.<cluster-name>.<domain>:443
-      tls:
-        trustedCertificates:
-          - secretName: cluster-b-cluster-ca-cert
-            pattern: "*.crt"
-      authentication:
-        type: tls
-        certificateAndKey:
-          secretName: cluster-b-user
-          certificate: user.crt
-          key: user.key
+      bootstrapServers: cluster-b-kafka-bootstrap.target.svc.cluster.local:9092
+      #      tls:
+      #        trustedCertificates:
+      #          - secretName: cluster-b-cluster-ca-cert
+      #            pattern: "*.crt"
+      #      authentication:
+      #        type: tls
+      #        certificateAndKey:
+      #          secretName: cluster-b-user
+      #          certificate: user.crt
+      #          key: user.key
       config:
         # -1 means it will use the default replication factor configured in the broker
         config.storage.replication.factor: -1

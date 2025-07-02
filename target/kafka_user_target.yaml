@@ -15,67 +15,52 @@ spec:
       - resource:
           type: group
           name: mirrormaker2-cluster
-        operations:
-          - Read
+        operation: Read
       - resource:
           type: topic
           name: mirrormaker2-cluster-configs
-        operations:
-          - Read
-          - Describe
-          - DescribeConfigs
-          - Write
-          - Create
+        operation: All
       - resource:
           type: topic
           name: mirrormaker2-cluster-status
-        operations:
-          - Read
-          - Describe
-          - DescribeConfigs
-          - Write
-          - Create
+        operation: All
       - resource:
           type: topic
           name: mirrormaker2-cluster-offsets
-        operations:
-          - Read
-          - Describe
-          - DescribeConfigs
-          - Write
-          - Create
-      - resource: # Needed for every topic which is mirrored
+        operation: All
         # MirrorSourceConnector
       - resource: # Needed for every topic which is mirrored
           type: topic
           name: "*"
         # MirrorSourceConnector
 
-        operations:
-          - Read
-          - Write
-          - AlterConfigs
-          - Alter
-          - Create
+        operation: All
       - resource:
           type: cluster
         # MirrorCheckpointConnector
 
-        operations:
-          - Describe
+        operation: Describe
       - resource:
           type: topic
           name: cluster-a.checkpoints.internal
-        operations:
-          - Describe
-          - Write
-          - Create
+        operation: Describe
+      - resource:
+          type: topic
+          name: cluster-a.checkpoints.internal
+        operation: Write
+
+      - resource:
+          type: topic
+          name: cluster-a.checkpoints.internal
+        operation: Create
       - resource: # Needed for every group for which the offset is synced
           type: group
           name: "*"
-        operations:
-          - Read
-          - Describe
+        operation: Read
+      - resource: # Needed for every group for which the offset is synced
+          type: group
+          name: "*"
+        operation: Describe
     # MirrorHeartbeatConnector => needed only if the connector is enabled
 
 # - resource:

@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+   name: kafka-producer-job
+   namespace: source
+spec:
+      template:
+        spec:
+          containers:
+          - name: kafka-producer
+            image: quay.io/riadlinsoft/kafka-producer-job:latest
+            imagePullPolicy: Always
+          restartPolicy: Never
+      backoffLimit: 10

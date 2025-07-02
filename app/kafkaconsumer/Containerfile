@@ -1,0 +1,8 @@
+FROM quay.io/strimzi/kafka:latest-kafka-4.0.0
+
+WORKDIR /app 
+
+COPY consume-messages.sh /app/consume-messages.sh 
+
+
+ENTRYPOINT ["/app/consume-messages.sh"]

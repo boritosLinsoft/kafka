@@ -15,29 +15,22 @@ spec:
       - resource: # Not needed if offset-syncs.topic.location=target
           type: topic
           name: mm2-offset-syncs.cluster-b.internal
-        operations:
-          - Read
-          - DescribeConfigs
-          - Write
-          - Create
+        operation: All
       - resource: # Needed for every topic which is mirrored
           type: topic
           name: "*"
-        operations:
-          - Read
-          - DescribeConfigs
-          - Write
-          - Describe
-          - Create
+        operation: All
       - resource:
           type: cluster
         # MirrorCheckpointConnector
 
-        operations:
-          - Describe
+        operation: Describe
       - resource: # Needed for every group for which offsets are synced
           type: group
           name: "*"
-        operations:
-          - Describe
-          - Read
+        operation: Describe
+
+      - resource: # Needed for every group for which offsets are synced
+          type: group
+          name: "*"
+        operation: Read

@@ -1,0 +1,8 @@
+FROM quay.io/strimzi/kafka:latest-kafka-4.0.0
+
+WORKDIR /app 
+
+COPY produce-messages.sh /app/produce-messages.sh 
+
+
+ENTRYPOINT ["/app/produce-messages.sh"]

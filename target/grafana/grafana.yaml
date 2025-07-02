@@ -1,0 +1,27 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+     name: grafana
+     namespace: grafana-operator
+     labels:
+        dashboards: "grafana"
+spec:
+     replicas: 2 # For high availability in multi-node setup
+     config:
+        log:
+           mode: "console"
+        security:
+           admin_user: root
+           admin_password: secret
+        auth:
+           disable_login_form: "false"
+     deployment:
+        affinity:
+           podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                    labelSelector:
+                      matchLabels:
+                        app.kubernetes.io/name: grafana
+                    topologyKey: kubernetes.io/hostname

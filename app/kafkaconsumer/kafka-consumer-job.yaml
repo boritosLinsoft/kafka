@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+   name: kafka-consume-job
+   namespace: target
+spec:
+      template:
+        spec:
+          containers:
+          - name: kafka-consumer
+            image: quay.io/riadlinsoft/kafka-consumer-job:latest
+            imagePullPolicy: Always
+          restartPolicy: Never
+      backoffLimit: 4

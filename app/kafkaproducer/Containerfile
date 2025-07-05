@@ -4,5 +4,4 @@ WORKDIR /app
 
 COPY produce-messages.sh /app/produce-messages.sh 
 
-
 ENTRYPOINT ["/app/produce-messages.sh"]

@@ -1,0 +1,8 @@
+FROM quay.io/strimzi/kafka:latest-kafka-4.0.0
+
+WORKDIR /app 
+
+COPY topic_delete.sh /app/topic_delete.sh
+
+ENTRYPOINT ["/app/topic_delete.sh"]
+

@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+   name: kafka-delete-topic-job
+   namespace: source
+spec:
+      template:
+        spec:
+          containers:
+          - name: kafka-delete-topic
+            image: quay.io/riadlinsoft/kafka-delete-topic-job:latest
+            imagePullPolicy: Always
+          restartPolicy: Never
+      backoffLimit: 4

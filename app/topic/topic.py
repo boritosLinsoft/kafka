@@ -1,6 +1,6 @@
 import yaml
 
-for i in range(1,101):
+for i in range(1,51):
     topic = {
         "apiVersion": "kafka.strimzi.io/v1beta2",
         "kind": "KafkaTopic",
@@ -25,5 +25,5 @@ for i in range(1,101):
         yaml.dump(topic, f)
 
 import os
-for i in range(1, 101):
+for i in range(1, 51):
     os.system(f"oc apply -f topic-{i}.yaml")

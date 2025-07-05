@@ -9,7 +9,7 @@ spec:
     connectCluster: "cluster-b" # Must be the target custer
     clusters:
      - alias: "cluster-a" # Source cluster
-       bootstrapServers: cluster-a-kafka-bootstrap-source.apps.ocp4.example.com:443
+       bootstrapServers: cluster-a-kafka-bootstrap-source.apps.ocp4-mng.example.com:443
        tls:
           trustedCertificates:
           - certificate: ca.crt        
@@ -22,7 +22,7 @@ spec:
           certificate: user.crt
           key: user.key
      - alias: "cluster-b" # Target cluster
-       bootstrapServers: cluster-b-kafka-bootstrap-target.apps.ocp4-mng.example.com:443
+       bootstrapServers: cluster-b-kafka-bootstrap-target.apps.ocp4.example.com:443
        tls:
            trustedCertificates:
              - certificate: ca.crt 
@@ -49,9 +49,11 @@ spec:
           replication.factor: -1
           offset-syncs.topic.replication.factor: -1
           sync.topic.acls.enabled: "false"
-          refresh.topics.interval.seconds: 60
+          refresh.topics.interval.seconds: 600
           refresh.topics.enabled: "true"
           offset.lag.max: 100
+          replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"  # Use IdentityReplicationPolicy
+          replication.policy.separator: ""  # Set to empty to avoid any separator
       checkpointConnector:
         tasksMax: 1
         config:
@@ -61,6 +63,7 @@ spec:
           emit.checkpoints.interval.seconds: 60
           sync.group.offsets.interval.seconds: 60
           refresh.groups.interval.seconds: 600
-          replication.policy.class: io.strimzi.kafka.connect.mirror.IdentityReplicationPolicy
+          replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"  # Apply to checkpoint connector
+          replication.policy.separator: ""  # Set to empty
       topicsPattern: ".*"
       groupsPattern: ".*"

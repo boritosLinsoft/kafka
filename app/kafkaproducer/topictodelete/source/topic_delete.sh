@@ -1,9 +1,12 @@
 #!/bin/bash
-BOOTSTRAP_SERVER="cluster-a-kafka-bootstrap:9092"
+#BOOTSTRAP_SERVER="cluster-a-kafka-bootstrap:9092"
 
-echo "Start delete topic"
-for i in {1..100}
+echo "Start deleting topics"
+start=$1
+end=$2
+for ((i=start; i<=end; i++ ))
 do
-   /opt/kafka/bin/kafka-topics.sh --bootstrap-server $BOOTSTRAP_SERVER --delete --topic topic-$i
+   echo "Processing topic deletion: topic-$i ..."
+   /opt/kafka/bin/kafka-topics.sh --bootstrap-server "$BOOTSTRAP_SERVER" --delete --topic topic-$i
 done
-echo "Finish delete topic"
+echo "Finish deleting topics"

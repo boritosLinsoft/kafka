@@ -9,6 +9,12 @@ spec:
           containers:
           - name: kafka-delete-topic
             image: quay.io/riadlinsoft/kafka-delete-topic-job:latest
+            env:
+            - name: BOOTSTRAP_SERVER
+              value: "cluster-a-kafka-bootstrap:9092"
+            args:
+            - "1"
+            - "50"
             imagePullPolicy: Always
           restartPolicy: Never
       backoffLimit: 4
